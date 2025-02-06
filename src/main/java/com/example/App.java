@@ -1,18 +1,44 @@
+package com.example;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Scanner;
+
 import dominios.Emprestimo;
 import dominios.Livro;
 import dominios.Usuario;
-import java.util.Scanner;
+
 
 public class App {
+    Livro listaDeLivros[] = new Livro[100];
+    Usuario listaDeUsuarios[] = new Usuario[100];
+
+    int contadorDeLivros = 0;
+    int contadorDeUsuarios = 0;
+
+    Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Livro listaDeLivros[] = new Livro[100];
-        Usuario listaDeUsuarios[] = new Usuario[100];
+       
 
-        int contadorDeLivros = 0;
-        int contadorDeUsuarios = 0;
+        try {
 
-        Scanner scanner = new Scanner(System.in);
+            Connection conect = DriverManager.getConnection("jdbc:postgresql://localhost:5432/biblioteca", "postgres", "#Alex0706");
+            if(conect!=null){
+                System.out.println("O banco de dados esta conectado");
+            }else{
+                System.out.println("Deu erro ai ó");
+            }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        new App().executar();
+    }
+
+    public void executar() {
         while (true) {
             System.out.println(
                     "\n1 - Cadastrar Livro\n2 - Listar todos os livros\n3 - Listar livros emprestados e disponiveis\n4 - Listar histórico de emprestimos do usuario\n5 - Pegar livro emprestado\n6 - Devolver livro\n7 - Cadastrar Usuario\n8 - Sair\n");
