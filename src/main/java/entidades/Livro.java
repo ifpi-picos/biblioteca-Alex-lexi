@@ -1,4 +1,4 @@
-package dominios;
+package entidades;
 
 public class Livro {
     private String autor;

@@ -1,13 +1,12 @@
 package com.example;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Scanner;
 
-import dominios.Emprestimo;
-import dominios.Livro;
-import dominios.Usuario;
+import dao.ConectDao;
+import entidades.Emprestimo;
+import entidades.Livro;
+import entidades.Usuario;
 
 
 public class App {
@@ -20,21 +19,15 @@ public class App {
     Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-       
 
-        try {
+        Connection conn = ConectDao.Conect();
+                if (conn != null) {
+                    System.out.println("Ufa deu certo");
+                    // Use a conexão para operações no banco de dados
+                } else {
+                    System.out.println("Minha nossa,VIXE VIXE VIXE");
+                }
 
-            Connection conect = DriverManager.getConnection("jdbc:postgresql://localhost:5432/biblioteca", "postgres", "#Alex0706");
-            if(conect!=null){
-                System.out.println("O banco de dados esta conectado");
-            }else{
-                System.out.println("Deu erro ai ó");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
         new App().executar();
     }
 

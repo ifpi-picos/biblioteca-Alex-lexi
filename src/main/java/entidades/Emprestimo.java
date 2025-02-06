@@ -1,4 +1,4 @@
-package dominios;
+package entidades;
 
 public class Emprestimo {
     private String dataEmprestimo;
