@@ -1,18 +1,22 @@
 package entidades;
 
 public class Emprestimo {
-    private String dataEmprestimo;
-    private String dataDevolucao;
-    private Livro livro;
-    private Usuario usuario;
+    private String dataEmprestimo;  // Data do empréstimo
+    private String dataDevolucao;   // Data de devolução do livro
+    private String tituloLivro;     // Título do livro
+    private String nomeUsuario;    // Nome do usuário
+    private String cpfUsuario;     // CPF do usuário
 
-    public Emprestimo(String dataDevolucao, Livro livro, Usuario usuario) {
-        this.dataEmprestimo = new java.util.Date().toString();
+    // Construtor da classe
+    public Emprestimo(String dataDevolucao, String tituloLivro, String nomeUsuario, String cpfUsuario) {
+        this.dataEmprestimo = new java.util.Date().toString(); // Data atual como data de empréstimo
         this.dataDevolucao = dataDevolucao;
-        this.livro = livro;
-        this.usuario = usuario;
+        this.tituloLivro = tituloLivro;
+        this.nomeUsuario = nomeUsuario;
+        this.cpfUsuario = cpfUsuario;
     }
 
+    // Métodos getters e setters
     public String getDataEmprestimo() {
         return dataEmprestimo;
     }
@@ -29,20 +33,27 @@ public class Emprestimo {
         this.dataDevolucao = dataDevolucao;
     }
 
-    public Livro getLivro() {
-        return livro;
+    public String getTituloLivro() {
+        return tituloLivro;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public void setTituloLivro(String tituloLivro) {
+        this.tituloLivro = tituloLivro;
     }
 
-    public void realizarEmprestimo() {
-        if (livro.getEmprestado()) {
-            System.out.println("Livro já emprestado");
-        } else {
-            livro.setEmprestado(true);
-            System.out.println("Livro emprestado com sucesso");
-        }
+    public String getNomeUsuario() {
+        return nomeUsuario;
+    }
+
+    public void setNomeUsuario(String nomeUsuario) {
+        this.nomeUsuario = nomeUsuario;
+    }
+
+    public String getCpfUsuario() {
+        return cpfUsuario;
+    }
+
+    public void setCpfUsuario(String cpfUsuario) {
+        this.cpfUsuario = cpfUsuario;
     }
 }
