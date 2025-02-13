@@ -1,7 +1,6 @@
 package dao;
 
 import entidades.Livro;
-import entidades.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.List;
 
 public class LivroDao {
 
-    private Connection conexao;
+    
 
     // Método para adicionar um novo livro ao banco de dados
     public void adicionarLivro(Livro livro) {
@@ -147,47 +146,27 @@ public class LivroDao {
 
     // Método para atualizar o status de empréstimo de um livro
     public void atualizarStatusEmprestimo(Livro livro) {
-        String sql = "UPDATE livros SET emprestado = ? WHERE titulo = ?"; // Consulta para atualizar o status de
-                                                                          // empréstimo
-
-        try (Connection conn = ConectDao.getConect(); // Abre a conexão com o banco
-                PreparedStatement stmt = conn.prepareStatement(sql)) { // Prepara a consulta SQL
-
-            stmt.setBoolean(1, livro.getEmprestado()); // Define o status de empréstimo
-            stmt.setString(2, livro.getTitulo()); // Define o título como parâmetro
-
-            int rowsAffected = stmt.executeUpdate(); // Executa a atualização no banco
-            if (rowsAffected > 0) { // Se o livro foi atualizado
+        String sql = "UPDATE livros SET emprestado = ? WHERE id = ?"; // Usando ID para garantir precisão
+    
+        try (Connection conn = ConectDao.getConect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setBoolean(1, livro.getEmprestado());
+            stmt.setInt(2, livro.getId()); // Usando o ID do livro
+    
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
                 System.out.println("Status de empréstimo atualizado com sucesso.");
             } else {
-                System.out.println("Nenhum livro encontrado com o título fornecido.");
+                System.out.println("Nenhum livro encontrado com o ID fornecido.");
             }
-
-        } catch (SQLException e) { // Se ocorrer algum erro durante a atualização, captura a exceção
+    
+        } catch (SQLException e) {
             System.err.println("Erro ao atualizar status de empréstimo: " + e.getMessage());
             e.printStackTrace();
         }
     }
+    
 
-    // Método para excluir um livro do banco de dados
-    public void excluirLivro(String titulo) {
-        String sql = "DELETE FROM livros WHERE titulo = ?"; // Consulta para excluir o livro pelo título
-
-        try (Connection conn = ConectDao.getConect(); // Abre a conexão com o banco
-                PreparedStatement stmt = conn.prepareStatement(sql)) { // Prepara a consulta SQL
-
-            stmt.setString(1, titulo); // Define o título como parâmetro
-            int rowsAffected = stmt.executeUpdate(); // Executa a exclusão
-
-            if (rowsAffected > 0) { // Se o livro foi excluído
-                System.out.println("Livro excluído com sucesso.");
-            } else {
-                System.out.println("Nenhum livro encontrado com o título fornecido.");
-            }
-
-        } catch (SQLException e) { // Se ocorrer algum erro durante a exclusão, captura a exceção
-            System.err.println("Erro ao excluir livro: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
+  
 }

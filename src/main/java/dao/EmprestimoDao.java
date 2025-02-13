@@ -55,7 +55,7 @@ public class EmprestimoDao {
                 String dataDevolucao = rs.getString("data_devolucao");
 
                 // Cria um objeto Emprestimo com os dados do banco e adiciona à lista
-                historicoEmprestimos.add(new Emprestimo(dataDevolucao, tituloLivro, "", cpfUsuario));
+                historicoEmprestimos.add(new Emprestimo(dataEmprestimo, dataDevolucao, tituloLivro, "", cpfUsuario));
             }
 
         } catch (SQLException e) {
@@ -66,20 +66,20 @@ public class EmprestimoDao {
     }
 
     // Método para atualizar a data de devolução de um empréstimo
-    public void atualizarDataDevolucao(int idEmprestimo, String novaDataDevolucao) {
-        String sql = "UPDATE emprestimos SET data_devolucao = ? WHERE id = ?";
+    public void atualizarDataDevolucao(String cpfEmprestimo, String novaDataDevolucao) {
+        String sql = "UPDATE emprestimos SET data_devolucao = ? WHERE cpf = ?";
 
         try (Connection conexao = ConectDao.getConect(); 
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setString(1, novaDataDevolucao);
-            stmt.setInt(2, idEmprestimo);
+            stmt.setString(2, cpfEmprestimo);
 
             int linhasAfetadas = stmt.executeUpdate();
             if (linhasAfetadas > 0) {
                 System.out.println("Data de devolução atualizada com sucesso!");
             } else {
-                System.out.println("Nenhum empréstimo encontrado com o ID fornecido.");
+                System.out.println("Nenhum empréstimo encontrado com o CPF fornecido.");
             }
 
         } catch (SQLException e) {
@@ -87,24 +87,5 @@ public class EmprestimoDao {
         }
     }
 
-    // Método para excluir um empréstimo
-    public void excluirEmprestimo(int idEmprestimo) {
-        String sql = "DELETE FROM emprestimos WHERE id = ?";
-
-        try (Connection conexao = ConectDao.getConect();
-             PreparedStatement stmt = conexao.prepareStatement(sql)) {
-
-            stmt.setInt(1, idEmprestimo);
-
-            int linhasAfetadas = stmt.executeUpdate();
-            if (linhasAfetadas > 0) {
-                System.out.println("Empréstimo excluído com sucesso!");
-            } else {
-                System.out.println("Nenhum empréstimo encontrado com o ID fornecido.");
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Erro ao excluir empréstimo: " + e.getMessage());
-        }
-    }
+    
 }

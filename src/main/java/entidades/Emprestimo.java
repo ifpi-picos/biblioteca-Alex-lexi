@@ -15,6 +15,13 @@ public class Emprestimo {
         this.nomeUsuario = nomeUsuario;
         this.cpfUsuario = cpfUsuario;
     }
+    public Emprestimo(String dataEmprestimo, String dataDevolucao, String tituloLivro, String nomeUsuario, String cpfUsuario) {
+        this.dataEmprestimo = dataEmprestimo; // Data atual como data de empréstimo
+        this.dataDevolucao = dataDevolucao;
+        this.tituloLivro = tituloLivro;
+        this.nomeUsuario = nomeUsuario;
+        this.cpfUsuario = cpfUsuario;
+    }
 
     // Métodos getters e setters
     public String getDataEmprestimo() {

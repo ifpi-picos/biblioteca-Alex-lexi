@@ -79,7 +79,7 @@ public class App {
                     if (usuarioEncontrado != null) {
                         List<Emprestimo> historico = new EmprestimoDao().listarHistoricoEmprestimos(cpfUsuario);
                         for (Emprestimo emp : historico) {
-                            System.out.println("Título do livro: " + emp.getTituloLivro() + "\nData de empréstimo: " + emp.getDataEmprestimo());
+                            System.out.println("Título do livro: " + emp.getTituloLivro() + "\nData de empréstimo: " + emp.getDataEmprestimo() + "\nData de Devolução: " + emp.getDataDevolucao() + "\n");
                         }
                     } else {
                         System.out.println("Usuário não encontrado.");
@@ -109,21 +109,42 @@ public class App {
                     }
                     break;
 
-                case "6": // Devolver um livro
+                    case "6": // Devolver um livro
                     System.out.println("Digite o título do livro: ");
-                    tituloLivro = scanner.nextLine();
+                    tituloLivro = scanner.nextLine().trim(); // Remove espaços desnecessários
                     Livro livroDevolvido = new LivroDao().buscarPorTitulo(tituloLivro);
+                
                     if (livroDevolvido != null && livroDevolvido.getEmprestado()) {
-                        System.out.println("Digite a data de devolução (dd/MM/yyyy): ");
-                        String dataDevolucao = scanner.nextLine();
-                        new EmprestimoDao().atualizarDataDevolucao(livroDevolvido.getId(), dataDevolucao);
-                        livroDevolvido.setEmprestado(false); // Marca o livro como devolvido
-                        new LivroDao().atualizarStatusEmprestimo(livroDevolvido);
-                        System.out.println("Livro devolvido com sucesso!");
+                        System.out.println("Digite o CPF do usuário: ");
+                        cpfUsuario = scanner.nextLine().trim();
+                
+                        Usuario usuarioBuscado2 = new UsuarioDao().buscarPorCPF(cpfUsuario);
+                        if (usuarioBuscado2 != null) {
+                            System.out.println("Digite a data de devolução (dd/MM/yyyy): ");
+                            String dataDevolucao = scanner.nextLine().trim();
+                
+                            try {
+                                // Atualiza a data de devolução
+                                new EmprestimoDao().atualizarDataDevolucao(usuarioBuscado2.getCpf(), dataDevolucao);
+                
+                                // Marca o livro como disponível
+                                livroDevolvido.setEmprestado(false); 
+                                new LivroDao().atualizarStatusEmprestimo(livroDevolvido);
+                
+                                System.out.println("Livro '" + tituloLivro + "' devolvido com sucesso!");
+                            } catch (Exception e) {
+                                System.err.println("Erro ao processar devolução: " + e.getMessage());
+                            }
+                
+                        } else {
+                            System.out.println("Usuário não encontrado. Verifique o CPF.");
+                        }
+                
                     } else {
-                        System.out.println("Livro não encontrado ou não emprestado.");
+                        System.out.println("Livro não encontrado ou não está emprestado.");
                     }
                     break;
+                
 
                 case "7": // Cadastrar um novo usuário
                     System.out.println("Digite o nome do usuário: ");
